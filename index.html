@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luméra Cosmetics — Premium Beauty &amp; Skincare</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       PAGE LOADER
+  ══════════════════════════════════════ -->
+  <div class="page-loader" id="loader">
+    <div class="loader-logo">Luméra <span>Cosmetics</span></div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor"      id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- PARTICLES CANVAS -->
+  <canvas id="particles"></canvas>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <div class="toast-dot"></div>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-logo">Luméra<span>Cosmetics</span></div>
+
+    <ul class="nav-links">
+      <li><a href="#" onclick="scrollToSection('home');return false">Home</a></li>
+      <li><a href="#" onclick="scrollToSection('shop');return false">Shop</a></li>
+      <li><a href="#" onclick="scrollToSection('categories');return false">Categories</a></li>
+      <li><a href="#" onclick="scrollToSection('reviews');return false">Reviews</a></li>
+      <li><a href="#" onclick="showAdmin();return false">Admin</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Cart Icon -->
+      <div style="position:relative">
+        <div class="nav-icon" onclick="openCart()">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <div class="cart-count" id="cartCount">0</div>
+        </div>
+      </div>
+      <!-- Wishlist Icon -->
+      <div class="nav-icon" onclick="showToast('♡ Wishlist coming soon')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+      </div>
+      <!-- Account Icon -->
+      <div class="nav-icon" onclick="showToast('👤 Account feature coming soon')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════ -->
+  <main>
+
+    <!-- ── HERO ── -->
+    <section class="hero" id="home">
+      <div class="hero-bg-orb orb1"></div>
+      <div class="hero-bg-orb orb2"></div>
+      <div class="hero-bg-orb orb3"></div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow">New Collection 2025</div>
+        <h1 class="hero-title">Your Skin<br>Deserves<br><em>Luxury</em></h1>
+        <p class="hero-subtitle">Discover our curated range of premium skincare and cosmetics, crafted with the finest botanical ingredients for radiant, timeless beauty.</p>
+        <div>
+          <a class="btn-primary" href="#" onclick="scrollToSection('shop');return false">
+            <span>Explore Collection</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn-outline" href="#" onclick="scrollToSection('reviews');return false">Our Story</a>
+        </div>
+      </div>
+
+      <!-- 3D Canvas -->
+      <div class="hero-3d">
+        <canvas id="hero-canvas"></canvas>
+      </div>
+
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Scroll to Discover</span>
+      </div>
+    </section>
+
+    <!-- ── MARQUEE TICKER ── -->
+    <div class="marquee-wrap">
+      <div class="marquee-inner" id="marqueeInner">
+        <span>Premium Skincare</span><span class="marquee-dot">✦</span>
+        <span>Luxury Cosmetics</span><span class="marquee-dot">✦</span>
+        <span>Natural Ingredients</span><span class="marquee-dot">✦</span>
+        <span>Cruelty Free</span><span class="marquee-dot">✦</span>
+        <span>Dermatologist Tested</span><span class="marquee-dot">✦</span>
+        <span>Free Shipping</span><span class="marquee-dot">✦</span>
+        <span>Premium Skincare</span><span class="marquee-dot">✦</span>
+        <span>Luxury Cosmetics</span><span class="marquee-dot">✦</span>
+        <span>Natural Ingredients</span><span class="marquee-dot">✦</span>
+        <span>Cruelty Free</span><span class="marquee-dot">✦</span>
+        <span>Dermatologist Tested</span><span class="marquee-dot">✦</span>
+        <span>Free Shipping</span><span class="marquee-dot">✦</span>
+      </div>
+    </div>
+
+    <!-- ── CATEGORIES ── -->
+    <section class="categories reveal" id="categories">
+      <div class="section-header">
+        <span class="section-tag">Shop by Category</span>
+        <h2 class="section-title">Curated <em>Collections</em></h2>
+      </div>
+      <div class="categories-grid">
+        <div class="cat-card" onclick="filterCategory('skincare')">
+          <div class="cat-img" style="width:100%;height:100%;background:linear-gradient(135deg,#F5EDE2,#E8D0BB);display:flex;align-items:center;justify-content:center;font-size:80px"><img src="/images/download (1).jfif"></div>
+          <div class="cat-shine"></div>
+          <div class="cat-overlay">
+            <div class="cat-name">Skincare</div>
+            <div class="cat-count">28 Products</div>
+          </div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('makeup')">
+          <div class="cat-img" style="width:100%;height:100%;background:linear-gradient(135deg,#F0DDD0,#DDBCA5);display:flex;align-items:center;justify-content:center;font-size:80px"><img src="/images/download (7).jfif"></div>
+          <div class="cat-shine"></div>
+          <div class="cat-overlay">
+            <div class="cat-name">Makeup</div>
+            <div class="cat-count">45 Products</div>
+          </div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('fragrance')">
+          <div class="cat-img" style="width:100%;height:100%;background:linear-gradient(135deg,#EDE0F0,#D4B8D4);display:flex;align-items:center;justify-content:center;font-size:80px"><img src="/images/The Best Men's Fragrances to Buy in 2020.jfif"></div>
+          <div class="cat-shine"></div>
+          <div class="cat-overlay">
+            <div class="cat-name">Fragrance</div>
+            <div class="cat-count">16 Products</div>
+          </div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('haircare')">
+          <div class="cat-img" style="width:100%;height:100%;background:linear-gradient(135deg,#E8F0E0,#C8DDB8);display:flex;align-items:center;justify-content:center;font-size:80px"><img src="/images/Biopoint Hair Shampoo.jfif"></div>
+          <div class="cat-shine"></div>
+          <div class="cat-overlay">
+            <div class="cat-name">Haircare</div>
+            <div class="cat-count">22 Products</div>
+          </div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('bath')">
+          <div class="cat-img" style="width:100%;height:100%;background:linear-gradient(135deg,#E0EBF0,#B8D0DD);display:flex;align-items:center;justify-content:center;font-size:80px"><img src="/images/download (8).jfif"></div>
+          <div class="cat-shine"></div>
+          <div class="cat-overlay">
+            <div class="cat-name">Bath &amp; Body</div>
+            <div class="cat-count">19 Products</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRODUCTS GRID ── -->
+    <section class="products reveal" id="shop">
+      <div class="section-header">
+        <span class="section-tag">Bestsellers</span>
+        <h2 class="section-title">Most <em>Loved</em> Products</h2>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+      <div style="text-align:center;margin-top:48px">
+        <button class="btn-primary" onclick="loadMoreProducts()" style="border:none;cursor:none;font-family:'Jost',sans-serif;">
+          <span>Load More Products</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── LUXURY BANNER ── -->
+    <div class="luxury-banner reveal">
+      <div class="luxury-banner-bg"></div>
+      <div class="luxury-banner-content">
+        <div class="gold-divider"></div>
+        <h2>Beauty is a <em>ritual,</em><br>not a routine</h2>
+        <p>Elevate your daily skincare with our award-winning formulas. Crafted with 97% natural ingredients, scientifically proven to transform your skin in 28 days.</p>
+        <a class="btn-primary" href="#" onclick="scrollToSection('shop');return false" style="text-decoration:none">
+          <span>Shop The Edit</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── FEATURES ── -->
+    <section class="features">
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🌿</div>
+          <div class="feature-title">Natural Ingredients</div>
+          <div class="feature-text">97% natural botanical extracts sourced ethically worldwide</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🐰</div>
+          <div class="feature-title">Cruelty Free</div>
+          <div class="feature-text">Never tested on animals, PETA certified and approved</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✈️</div>
+          <div class="feature-title">Free Delivery</div>
+          <div class="feature-text">Complimentary shipping on all orders above ₹999</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Easy Returns</div>
+          <div class="feature-text">30-day hassle-free return policy, no questions asked</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REVIEWS ── -->
+    <section class="reviews-section reveal" id="reviews">
+      <div class="section-header">
+        <span class="section-tag">Testimonials</span>
+        <h2 class="section-title">What Our <em>Clients</em> Say</h2>
+      </div>
+
+      <!-- Rating Summary -->
+      <div class="review-summary">
+        <div class="review-score">
+          <div class="big-score">4.8</div>
+          <div class="product-stars" style="justify-content:center;margin:8px 0;color:var(--gold)">★★★★★</div>
+          <div style="font-size:12px;color:var(--text-light)">1,248 Reviews</div>
+        </div>
+        <div class="score-bars">
+          <div class="bar-row"><span class="bar-label">5 ★</span><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><span class="bar-count">972</span></div>
+          <div class="bar-row"><span class="bar-label">4 ★</span><div class="bar-track"><div class="bar-fill" style="width:15%"></div></div><span class="bar-count">187</span></div>
+          <div class="bar-row"><span class="bar-label">3 ★</span><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div><span class="bar-count">62</span></div>
+          <div class="bar-row"><span class="bar-label">2 ★</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-count">20</span></div>
+          <div class="bar-row"><span class="bar-label">1 ★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-count">7</span></div>
+        </div>
+      </div>
+
+      <div class="reviews-grid" id="reviewsGrid"></div>
+    </section>
+
+    <!-- ── CHECKOUT ── -->
+    <section class="checkout-section" id="checkoutSection">
+      <div class="section-header">
+        <span class="section-tag">Secure Checkout</span>
+        <h2 class="section-title">Complete Your <em>Order</em></h2>
+      </div>
+      <div class="checkout-grid">
+        <!-- Form -->
+        <div class="checkout-form">
+          <h3>Delivery Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="firstName" placeholder="Priya">
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="lastName" placeholder="Sharma">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="priya@example.com">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" id="address" placeholder="123, Rose Garden Apartments">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="city" placeholder="Mumbai">
+            </div>
+            <div class="form-group">
+              <label>Pincode</label>
+              <input type="text" id="pincode" placeholder="400001">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <select id="state">
+              <option>Maharashtra</option>
+              <option>Delhi</option>
+              <option>Karnataka</option>
+              <option>Tamil Nadu</option>
+              <option>Gujarat</option>
+              <option>Kerala</option>
+              <option>Rajasthan</option>
+            </select>
+          </div>
+
+          <h3 style="margin-top:32px">Delivery Method</h3>
+          <div class="delivery-opts">
+            <div class="delivery-opt selected" onclick="selectDelivery(this,'standard')">
+              <div class="delivery-opt-title">Standard</div>
+              <div class="delivery-opt-sub">5–7 days · Free</div>
+            </div>
+            <div class="delivery-opt" onclick="selectDelivery(this,'express')">
+              <div class="delivery-opt-title">Express</div>
+              <div class="delivery-opt-sub">1–2 days · ₹149</div>
+            </div>
+          </div>
+
+          <h3>Payment Method</h3>
+          <div class="payment-methods">
+            <div class="pay-method selected" onclick="selectPayment(this)">💳 Card</div>
+            <div class="pay-method" onclick="selectPayment(this)">📱 UPI</div>
+            <div class="pay-method" onclick="selectPayment(this)">🏦 Net Banking</div>
+            <div class="pay-method" onclick="selectPayment(this)">👛 Wallet</div>
+            <div class="pay-method" onclick="selectPayment(this)">💵 COD</div>
+          </div>
+
+          <div id="cardFields">
+            <div class="form-group">
+              <label>Card Number</label>
+              <input type="text" placeholder="4242 4242 4242 4242" maxlength="19">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry</label>
+                <input type="text" placeholder="MM/YY">
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <input type="text" placeholder="123" maxlength="3">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div>
+          <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div id="checkoutItems"></div>
+            <div class="order-divider"></div>
+            <div class="order-row"><span>Subtotal</span><span id="checkoutSubtotal">₹0</span></div>
+            <div class="order-row"><span>Delivery</span><span id="deliveryFee">Free</span></div>
+            <div class="order-row"><span>Tax (18% GST)</span><span id="checkoutTax">₹0</span></div>
+            <div class="order-divider"></div>
+            <div class="order-row">
+              <span style="font-weight:500">Total</span>
+              <span class="order-total" id="checkoutTotal">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="placeOrder()" style="margin-top:24px">Place Order</button>
+            <p style="font-size:11px;color:var(--text-light);text-align:center;margin-top:12px;letter-spacing:1px">🔒 Secured by SSL encryption</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ADMIN PANEL ── -->
+    <section class="admin-panel" id="adminPanel">
+      <div class="section-header">
+        <span class="section-tag">Administration</span>
+        <h2 class="section-title">Admin <em>Dashboard</em></h2>
+      </div>
+      <div class="admin-grid">
+        <div class="admin-sidebar">
+          <div class="admin-logo">Luméra Cosmetics</div>
+          <div class="admin-nav-item active"  onclick="adminNav(this,'overview')">📊 Overview</div>
+          <div class="admin-nav-item"         onclick="adminNav(this,'products')">🧴 Products</div>
+          <div class="admin-nav-item"         onclick="adminNav(this,'orders')">📦 Orders</div>
+          <div class="admin-nav-item"         onclick="adminNav(this,'customers')">👥 Customers</div>
+          <div class="admin-nav-item"         onclick="adminNav(this,'reviews')">⭐ Reviews</div>
+          <div class="admin-nav-item"         onclick="adminNav(this,'reports')">📈 Reports</div>
+        </div>
+        <div class="admin-content" id="adminContent">
+          <div class="admin-title">Dashboard Overview</div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Revenue</div>
+              <div class="stat-value">₹4.2L</div>
+              <div class="stat-change">↑ 24% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Orders</div>
+              <div class="stat-value">1,248</div>
+              <div class="stat-change">↑ 18% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Products</div>
+              <div class="stat-value">130</div>
+              <div class="stat-change">↑ 6 new this week</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Customers</div>
+              <div class="stat-value">8,490</div>
+              <div class="stat-change">↑ 412 new users</div>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-light)">Monthly Sales Chart</div>
+          <div class="chart-placeholder" id="adminChart"></div>
+          <div style="margin-bottom:16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-light)">Recent Orders</div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrders"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Luméra<span>Cosmetics</span></div>
+        <p class="footer-desc">Crafting luxury beauty experiences with the finest natural ingredients from around the world.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul class="footer-links">
+          <li><a href="#">Skincare</a></li>
+          <li><a href="#">Makeup</a></li>
+          <li><a href="#">Fragrance</a></li>
+          <li><a href="#">Haircare</a></li>
+          <li><a href="#">Bath &amp; Body</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul class="footer-links">
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">2026 Luméra Cosmetics. All rights reserved.</div>
+      <div class="footer-social">
+        <a class="social-link" href="#" aria-label="Instagram">IG</a>
+        <a class="social-link" href="#" aria-label="YouTube">YT</a>
+        <a class="social-link" href="#" aria-label="Facebook">FB</a>
+        <a class="social-link" href="#" aria-label="Twitter">TW</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       CART DRAWER
+  ══════════════════════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <div class="cart-title">Your Bag</div>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="empty-cart">
+        <div class="empty-cart-icon">🛍️</div>
+        <p>Your bag is empty.<br>Start adding products!</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="coupon-row">
+        <input class="coupon-input" type="text" placeholder="Coupon code (try LUXE20)" id="couponInput">
+        <button class="coupon-apply" onclick="applyCoupon()">Apply</button>
+      </div>
+      <div class="cart-total">
+        <span class="cart-total-label">Subtotal</span>
+        <span class="cart-total-amount" id="cartTotal">₹0</span>
+      </div>
+      <button class="checkout-btn" onclick="goToCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PRODUCT DETAIL MODAL
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay" id="productModal">
+    <div class="product-modal" style="position:relative">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+
+      <!-- Left: Gallery -->
+      <div class="modal-gallery">
+        <div class="modal-main-img" id="modalMainImg">
+          <div style="font-size:120px;text-align:center"><img src="/images/Delicate Me – Natural Care for Frizz-Free, Shiny Hair - Copy.jfif"></div>
+        </div>
+        <div class="modal-thumbs" id="modalThumbs"></div>
+        <canvas id="modal3dCanvas" style="width:100%;height:200px;margin-top:16px;display:none"></canvas>
+        <button class="modal-3d-btn" onclick="toggle3DView()">⟳ Toggle 3D View</button>
+      </div>
+
+      <!-- Right: Product Info -->
+      <div class="modal-info">
+        <div class="modal-brand"  id="modalBrand">Luméra Cosmetics</div>
+        <div class="modal-name"   id="modalName">Product Name</div>
+        <div class="modal-rating">
+          <div class="product-stars" style="color:var(--gold)">★★★★★</div>
+          <span style="font-size:13px;color:var(--text-light)">(248 reviews)</span>
+        </div>
+        <div class="modal-price">
+          <span class="modal-price-current" id="modalPrice">₹2,499</span>
+          <span class="modal-price-orig"    id="modalOrig">₹3,499</span>
+          <span class="modal-badge"         id="modalDiscount">-28%</span>
+        </div>
+        <div class="stock-status">
+          <div class="stock-dot"></div>
+          In Stock — Only 12 left
+        </div>
+
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <input  class="qty-input" type="number" value="1" min="1" id="modalQty">
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+
+        <div class="modal-btns">
+          <button class="btn-primary" onclick="addModalToCart()" style="border:none;cursor:none;font-family:'Jost',sans-serif;padding:16px 24px">
+            <span>Add to Bag</span>
+          </button>
+          <button class="btn-wish">♡</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <div class="tab-headers">
+            <button class="tab-btn active"  onclick="switchTab(this,'desc')">Description</button>
+            <button class="tab-btn"         onclick="switchTab(this,'ingr')">Ingredients</button>
+            <button class="tab-btn"         onclick="switchTab(this,'how')">How to Use</button>
+            <button class="tab-btn"         onclick="switchTab(this,'ben')">Benefits</button>
+          </div>
+
+          <div class="tab-content active" id="tab-desc">
+            <p id="modalDesc">A luxurious formulation designed to nourish, hydrate, and transform your skin.</p>
+          </div>
+
+          <div class="tab-content" id="tab-ingr">
+            <div id="modalIngr"></div>
+          </div>
+
+          <div class="tab-content" id="tab-how">
+            <div class="step-item"><div class="step-num">1</div><div>Cleanse your face thoroughly and pat dry.</div></div>
+            <div class="step-item"><div class="step-num">2</div><div>Apply a small amount to fingertips.</div></div>
+            <div class="step-item"><div class="step-num">3</div><div>Gently massage in upward circular motions.</div></div>
+            <div class="step-item"><div class="step-num">4</div><div>Allow to absorb 2–3 minutes before applying SPF.</div></div>
+            <div class="step-item"><div class="step-num">5</div><div>Use morning and evening for best results.</div></div>
+          </div>
+
+          <div class="tab-content" id="tab-ben">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Deep Hydration</div>
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Brightening</div>
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Anti-Aging</div>
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Pore Minimizing</div>
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Even Skin Tone</div>
+              <div style="padding:14px;border:1px solid rgba(200,149,108,0.15);font-size:13px">✦ Glow Boost</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end modal-info -->
+    </div><!-- end product-modal -->
+  </div><!-- end modal-overlay -->
+
+  <!-- ══════════════════════════════════════
+       INVOICE MODAL
+  ══════════════════════════════════════ -->
+  <div class="invoice-modal" id="invoiceModal">
+    <div class="invoice">
+      <div class="invoice-header">
+        <div>
+          <div class="invoice-logo">Luméra <span>Cosmetics</span></div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:4px">Beauty &amp; Skincare</div>
+        </div>
+        <div class="invoice-num">
+          <strong id="invoiceNum">INV-000001</strong>
+          <div id="invoiceDate" style="margin-top:4px"></div>
+          <div style="margin-top:4px;color:#4a9c5d">✓ Paid</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+        <div>
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Billed To</div>
+          <div id="invoiceCustomer" style="font-size:14px;line-height:1.8;color:var(--charcoal)"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Ship To</div>
+          <div id="invoiceAddress" style="font-size:14px;line-height:1.8;color:var(--charcoal)"></div>
+        </div>
+      </div>
+
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="invoiceItems"></tbody>
+      </table>
+
+      <div class="invoice-totals">
+        <div class="invoice-total-row"><span>Subtotal</span><span id="invSubtotal"></span></div>
+        <div class="invoice-total-row"><span>Delivery</span><span id="invDelivery"></span></div>
+        <div class="invoice-total-row"><span>GST (18%)</span><span id="invTax"></span></div>
+        <div class="invoice-grand">
+          <span style="font-weight:500">Total</span>
+          <span id="invTotal"></span>
+        </div>
+      </div>
+
+      <div class="invoice-actions">
+        <button class="btn-primary" onclick="downloadInvoice()" style="border:none;cursor:none;font-family:'Jost',sans-serif">
+          <span>Download PDF</span>
+        </button>
+        <button class="btn-outline" onclick="closeInvoice()" style="cursor:none">Close</button>
+      </div>
+
+      <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--glass-border);text-align:center;font-size:11px;color:var(--text-light);letter-spacing:1px">
+        Thank you for shopping with Luméra Cosmetics &middot; support@auraluxe.com
+      </div>
+    </div>
+  </div>
+  <div class="order-option-modal" id="orderOptionModal">
+  <div class="order-option-box">
+    <h3>Choose Order Method</h3>
+
+    <button class="order-btn whatsapp-btn" onclick="orderViaWhatsApp()">
+       Send Order via WhatsApp
+    </button>
+
+  <button onclick="generateInvoice()">Generate Invoice & Confirm</button>
+
+    <button class="order-close" onclick="closeOrderOption()">Cancel</button>
+  </div>
+</div>
+
+  <!-- Main JavaScript (must be last) -->
+  <script src="/script.js"></script>
+
+</body>
+</html>
